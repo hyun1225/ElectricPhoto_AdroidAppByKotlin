@@ -51,7 +51,6 @@ class MainActivity : AppCompatActivity() {
                     android.Manifest.permission.READ_EXTERNAL_STORAGE
                 ) == PackageManager.PERMISSION_GRANTED -> {
                     //todo 권한이 잘 부여되었을때 갤러리에서 사진을 선택하는 기능
-                    Toast.makeText(this,"포토 들어가기", Toast.LENGTH_SHORT).show()
                     navigatePhotos()
                 }
                 shouldShowRequestPermissionRationale(android.Manifest.permission.READ_EXTERNAL_STORAGE) -> {
@@ -59,10 +58,20 @@ class MainActivity : AppCompatActivity() {
                     showPermissionContextPopup()
                 }
                 else -> {
-                    Toast.makeText(this,"최대 6개 까지 선택 가능합니다. ", Toast.LENGTH_SHORT).show()
                     requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), 1000)
                 }
             }
+        }
+    }
+
+    private fun initStartPhotoFrameModeButton(){
+        startPhotoFrameModeButton.setOnClickListener {
+            val intent = Intent(this,PhotoFrameActivity::class.java)
+            imageUriList.forEachIndexed{ index, uri ->
+                intent.putExtra("photo$index", uri.toString())
+            }
+            intent.putExtra("photoListSize", imageUriList.size)
+            startActivity(intent)
         }
     }
 
@@ -134,7 +143,5 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun initStartPhotoFrameModeButton(){
 
-    }
 }
